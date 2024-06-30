@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /**
-   * tags-hide
+   * tag-hide
    */
   const clickFnOfTagHide = () => {
     const hideButtons = document.querySelectorAll('#article-container .hide-button')
