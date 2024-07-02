@@ -2746,4 +2746,36 @@ public class ConditionExample &#123;
         <tag>查缺补漏</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Bean的生命周期</title>
+    <url>/2024/07/02/Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
+    <content><![CDATA[<h1 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h1><p><img src="/../img/postimg/bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpeg" alt="img"></p>
+<p>我觉得Spring的生命周期可以分为四个阶段，实例化、属性赋值、初始化、销毁。</p>
+<p>初始化阶段可以细分为多个阶段，</p>
+<ol>
+<li>检查aware接口的实现情况：beanNameAware接口、classLoaderAware接口等</li>
+<li>执行BeanPostProcessor前置方法；</li>
+<li>检查initializingBean接口的实现；</li>
+<li>检查是否实现了自定义init方法；</li>
+<li>执行BeanPostProcessor后置方法；</li>
+</ol>
+<p>销毁阶段可以分为两个阶段，</p>
+<ol>
+<li>检查是否实现DisposalBean接口</li>
+<li>检查是否实现了自定义的destory方法；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostConstruct</span></span><br><span class="line">publicvoidinit() &#123; </span><br><span class="line">    System.out.println(<span class="string">&quot;MyBean is going through init.&quot;</span>); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="meta">@PreDestroy</span></span><br><span class="line">publicvoiddestroy() &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;MyBean will be destroyed now.&quot;</span>); </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.BeansException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.BeanPostProcessor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CustomBeanPostProcessor</span> <span class="keyword">implements</span> <span class="title class_">BeanPostProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Before Initialization : &quot;</span> + beanName);</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> MyBean) &#123;</span><br><span class="line">            <span class="comment">// 对 MyBean 做一些操作</span></span><br><span class="line">            ((MyBean) bean).setName(<span class="string">&quot;Modified by BeanPostProcessor before init&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean; <span class="comment">// you can return any other object as well</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;After Initialization : &quot;</span> + beanName);</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> MyBean) &#123;</span><br><span class="line">            <span class="comment">// 对 MyBean 做一些操作</span></span><br><span class="line">            System.out.println(<span class="string">&quot;MyBean after initialization: &quot;</span> + bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean; <span class="comment">// you can return any other object as well</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>走马观花</category>
+      </categories>
+      <tags>
+        <tag>查缺补漏</tag>
+      </tags>
+  </entry>
 </search>
